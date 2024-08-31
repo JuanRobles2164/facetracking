@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import FacetrackingComponent from '@/components/FacetrackingComponent.vue'
 
 const routes = [
+  {
+    path: '/',
+    name: 'root',
+    component: FacetrackingComponent
+  },
   {
     path: '/',
     name: 'home',
