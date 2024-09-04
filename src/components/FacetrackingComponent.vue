@@ -100,7 +100,12 @@ const identifyPeople = async () => {
   }
 }
 
+const resetListNames = () => {
+    names.value = [];
+};
+
 const toggleCamera = () => {
+    resetListNames();
   if (isCameraOn.value) {
     stopCamera()
   } else {
