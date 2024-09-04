@@ -89,10 +89,14 @@ const identifyPeople = async () => {
     await FTService.identify({"image": base64Image});
     //all data
     const response = FTService.getResults();
-    names.value = response.value.map(x => {
-        return x.name;
-    });
-    console.log(names.value);
+    if(response.value.length != null){
+        names.value = response.value.map(x => {
+            return x.name;
+        });
+        console.log(names.value);
+    }else{
+        names.value = ["No hay rostros"];
+    }
   }
 }
 

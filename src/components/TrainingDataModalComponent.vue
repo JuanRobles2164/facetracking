@@ -5,8 +5,8 @@
         </button>
 
         <teleport to="body">
-            <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
+                <div class="bg-white p-6 rounded-lg w-full max-w-md max-h-full overflow-y-auto">
                     <h2 class="text-2xl font-bold mb-4">Datos personales</h2>
                     <form @submit.prevent="submitForm">
                         <div class="mb-4">
