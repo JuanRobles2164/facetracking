@@ -1,54 +1,54 @@
 <template>
-    <div class="grid grid-cols-4 gap-4 p-4 h-[600px]">
-      <div class="col-span-3 bg-white shadow-md rounded-lg flex flex-col">
-        <div class="flex-grow flex flex-col justify-between p-6">
-          <div class="bg-gray-200 aspect-video rounded-lg flex items-center justify-center">
-            <video 
-              v-if="isCameraOn" 
-              ref="videoElement" 
-              class="rounded-lg flex" 
-              autoplay
-              playsinline
-            ></video>
-            <div v-else class="text-2xl font-bold text-gray-500">Cámara Apagada</div>
-          </div>
-          <button 
-            @click="toggleCamera" 
-            class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          >
+  <SidebarComponent />
+  <br>
+  <br>
+  <div class="top-4 grid grid-cols-4 gap-4 p-4 h-[600px]">
+    <div class="col-span-3 bg-white shadow-md rounded-lg flex flex-col">
+      <div class="flex-grow flex flex-col justify-between p-6">
+        <div class="bg-gray-200 aspect-video rounded-lg flex items-center justify-center">
+          <video v-if="isCameraOn" ref="videoElement" class="rounded-lg flex" autoplay playsinline></video>
+          <div v-else class="text-2xl font-bold text-gray-500">Cámara Apagada</div>
+        </div>
+        <button @click="toggleCamera"
+          class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center">
+          <span class="mr-2">
+            <Power v-if="!isCameraOn" />
+            <PowerOff v-else />
+          </span>
+          <span class="text-center">
             {{ isCameraOn ? 'Apagar cámara' : 'Encender cámara' }}
-          </button>
-          <TrainingDataModalComponent @click="stopCamera"/>
-        </div>
-      </div>
-      <div class="bg-white shadow-md rounded-lg">
-        <div class="p-6">
-          <h2 class="text-xl font-bold mb-4">En pantalla 👀</h2>
-          <ul class="space-y-2">
-            <li 
-              v-for="(name, index) in names" 
-              :key="index" 
-              class="bg-gray-100 p-2 rounded-lg"
-            >
-              {{ name }}
-            </li>
-          </ul>
-        </div>
+          </span>
+        </button>
       </div>
     </div>
-  </template>
-  
-  
-  <script setup>
+    <div class="bg-white shadow-md rounded-lg">
+      <div class="p-6">
+        <h2 class="text-xl font-bold mb-4">En pantalla 👀</h2>
+        <ul class="space-y-2">
+          <li v-for="(name, index) in names" :key="index" class="bg-gray-100 p-2 rounded-lg">
+            {{ name }}
+          </li>
+          <ImageListItemComponent v-for="(p, index) in persons" :key="index" :name="p.name" :image="p.image"/>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<script setup>
 import FaceTrackingService from '@/services/FaceTrackingService';
 import { ref, onBeforeUnmount } from 'vue'
-import TrainingDataModalComponent from './TrainingDataModalComponent.vue';
+import { Power, PowerOff } from 'lucide-vue-next';
+import SidebarComponent from './SidebarComponent.vue';
+import ImageListItemComponent from './ImageListItemComponent.vue';
 
 const isCameraOn = ref(false)
 const videoElement = ref(null)
 const intervalId = ref(null)
 const FTService = new FaceTrackingService();
 let names = ref([]);
+let persons = ref([]);
 
 
 const startCamera = async () => {
@@ -66,14 +66,14 @@ const startCamera = async () => {
 const stopCamera = () => {
   const stream = videoElement.value?.srcObject
   const tracks = stream?.getTracks()
-  
+
   tracks?.forEach(track => track.stop())
 
   clearInterval(intervalId.value);
 }
 
 const identifyPeople = async () => {
-    if (videoElement.value) {
+  if (videoElement.value) {
     const canvas = document.createElement('canvas')
     canvas.width = videoElement.value.videoWidth
     canvas.height = videoElement.value.videoHeight
@@ -86,26 +86,26 @@ const identifyPeople = async () => {
     const base64Image = canvas.toDataURL('image/png').slice(22);
 
     // Llamar a la función que maneja la imagen en base64
-    await FTService.identify({"image": base64Image});
+    await FTService.identify({ "image": base64Image });
     //all data
     const response = FTService.getResults();
-    if(response.value.length != null){
-        names.value = response.value.map(x => {
-            return x.name;
-        });
-        console.log(names.value);
-    }else{
-        names.value = ["No hay rostros"];
+    if (response.value.length != null) {
+      names.value = [];
+      persons.value = response.value;
+      console.log(response.value);
+    } else {
+      names.value = ["No hay rostros"];
+      persons.value = [];
     }
   }
 }
 
 const resetListNames = () => {
-    names.value = [];
+  names.value = [];
 };
 
 const toggleCamera = () => {
-    resetListNames();
+  resetListNames();
   if (isCameraOn.value) {
     stopCamera()
   } else {

@@ -1,7 +1,7 @@
 <template>
     <div class="p-4">
-        <button @click="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            ✍ Entrenar red
+        <button @click="openModal" class="flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out">
+            <Cpu /> &nbsp; Entrenar
         </button>
 
         <teleport to="body">
@@ -86,6 +86,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { Cpu } from 'lucide-vue-next';
 import FaceTrackingService from '@/services/FaceTrackingService';
 
 const isModalOpen = ref(false);
