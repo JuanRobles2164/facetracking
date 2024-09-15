@@ -29,6 +29,7 @@
                     :icon="HomeIcon" />
 
                 <TrainingDataModalComponent class="w-full flex items-center justify-start px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-300 ease-in-out"/>
+                <EditUmbralComponent class="w-full flex items-center justify-start px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-300 ease-in-out"/>
             </nav>
         </aside>
     </div>
@@ -39,6 +40,7 @@ import { ref } from 'vue'
 import { MenuIcon, XIcon, HomeIcon } from 'lucide-vue-next'
 import LogComponent from './LogComponent.vue';
 import TrainingDataModalComponent from './TrainingDataModalComponent.vue';
+import EditUmbralComponent from './EditUmbralComponent.vue';
 
 const isOpen = ref(false)
 

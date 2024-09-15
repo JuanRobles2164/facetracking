@@ -3,12 +3,14 @@ const BASE_URL = "http://127.0.0.1:5000";
 const IDENTIFY_ENDPOINT = BASE_URL + "/recognize_faces";
 const TRAIN_MODEL_ENDPOINT = BASE_URL + "/train_model";
 const LOG_ENDPOINT = BASE_URL + "/get_auditoria_data";
+const UMBRAL_ENDPOINT = BASE_URL + "/umbral";
 class FaceTrackingService {
     
     constructor(){
         this.results = ref([]);
         this.response = ref();
         this.log = ref([]);
+        this.umbral = ref(0);
     }
 
     getResults(){
@@ -19,6 +21,9 @@ class FaceTrackingService {
     }
     getLog(){
         return this.log;
+    }
+    getUmbral(){
+        return this.umbral;
     }
 
     // {"image": "data klajsldjka"}
@@ -62,6 +67,16 @@ class FaceTrackingService {
             const response = await fetch(endpoint);
             const json = await response.json();
             this.log.value = json;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async requestUmbral(umbral = 4.2){
+        try {
+            const endpoint = UMBRAL_ENDPOINT + "?umbral="+umbral;
+            const response = await fetch(endpoint);
+            const json = await response.json();
+            this.umbral.value = json.umbral;
         } catch (error) {
             console.log(error);
         }
